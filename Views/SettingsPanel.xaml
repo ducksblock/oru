@@ -1,0 +1,248 @@
+<UserControl x:Class="oru.Views.SettingsPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+  <Border Background="Transparent" CornerRadius="8">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+      <StackPanel Padding="16" Spacing="4">
+
+        <!-- ─── HEADER ─── -->
+        <Grid Margin="0,0,0,6">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+          </Grid.ColumnDefinitions>
+          <TextBlock Text="Settings"
+                     FontFamily="Segoe UI Variable Display" FontSize="18" FontWeight="SemiBold"
+                     Foreground="{ThemeResource TextFillColorPrimaryBrush}"
+                     VerticalAlignment="Center" />
+          <Button Grid.Column="1"
+                  x:Name="BackButton"
+                  Click="OnBackClick"
+                  Background="Transparent" BorderThickness="0"
+                  FocusVisualPrimaryThickness="0" FocusVisualSecondaryThickness="0"
+                  MinWidth="32" MinHeight="32" Padding="6"
+                  ToolTipService.ToolTip="Back">
+            <FontIcon Glyph="&#xE72B;" FontFamily="{ThemeResource SymbolThemeFontFamily}" FontSize="14"
+                      Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+          </Button>
+        </Grid>
+
+        <Border Height="1" Background="{ThemeResource DividerStrokeColorDefaultBrush}" Margin="0,0,0,8" />
+
+        <!-- ═══ GENERAL ═══ -->
+        <TextBlock Text="GENERAL" FontFamily="Segoe UI Variable Text" FontSize="11" FontWeight="SemiBold"
+                   Foreground="{ThemeResource TextFillColorTertiaryBrush}" CharacterSpacing="80" Margin="0,4,0,8" />
+
+        <!-- Run at Startup -->
+        <Border Padding="14,10,14,10" CornerRadius="6" Margin="0,0,0,2"
+                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1">
+          <Grid>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="*" />
+              <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="0" VerticalAlignment="Center" Spacing="1">
+              <TextBlock Text="Run at startup" FontFamily="Segoe UI Variable Text" FontSize="13"
+                         Foreground="{ThemeResource TextFillColorPrimaryBrush}" />
+              <TextBlock Text="Launch oru when Windows starts" FontFamily="Segoe UI Variable Text" FontSize="11"
+                         Foreground="{ThemeResource TextFillColorTertiaryBrush}" />
+            </StackPanel>
+            <ToggleSwitch Grid.Column="1" IsOn="{Binding RunAtStartup, Mode=TwoWay}"
+                          MinWidth="0" MinHeight="0" VerticalAlignment="Center" Margin="12,0,0,0"
+                          FocusVisualPrimaryThickness="0" FocusVisualSecondaryThickness="0" />
+          </Grid>
+        </Border>
+
+        <!-- Minimize to tray -->
+        <Border Padding="14,10,14,10" CornerRadius="6" Margin="0,0,0,2"
+                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1">
+          <Grid>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="*" />
+              <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="0" VerticalAlignment="Center" Spacing="1">
+              <TextBlock Text="Minimize to tray on close" FontFamily="Segoe UI Variable Text" FontSize="13"
+                         Foreground="{ThemeResource TextFillColorPrimaryBrush}" />
+              <TextBlock Text="Keep oru running in the background" FontFamily="Segoe UI Variable Text" FontSize="11"
+                         Foreground="{ThemeResource TextFillColorTertiaryBrush}" />
+            </StackPanel>
+            <CheckBox Grid.Column="1" IsChecked="{Binding MinimizeToTrayOnClose, Mode=TwoWay}"
+                      MinWidth="0" VerticalAlignment="Center" Margin="12,0,0,0"
+                      FocusVisualPrimaryThickness="0" FocusVisualSecondaryThickness="0" />
+          </Grid>
+        </Border>
+
+        <!-- Auto-resume mirroring -->
+        <Border Padding="14,10,14,10" CornerRadius="6" Margin="0,0,0,2"
+                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1">
+          <Grid>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="*" />
+              <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="0" VerticalAlignment="Center" Spacing="1">
+              <TextBlock Text="Auto-resume mirroring" FontFamily="Segoe UI Variable Text" FontSize="13"
+                         Foreground="{ThemeResource TextFillColorPrimaryBrush}" />
+              <TextBlock Text="Restart mirroring when a device reconnects" FontFamily="Segoe UI Variable Text" FontSize="11"
+                         Foreground="{ThemeResource TextFillColorTertiaryBrush}" />
+            </StackPanel>
+            <ToggleSwitch Grid.Column="1" IsOn="{Binding AutoResumeMirroring, Mode=TwoWay}"
+                          MinWidth="0" MinHeight="0" VerticalAlignment="Center" Margin="12,0,0,0"
+                          FocusVisualPrimaryThickness="0" FocusVisualSecondaryThickness="0" />
+          </Grid>
+        </Border>
+
+        <!-- Show disconnected BT -->
+        <Border Padding="14,10,14,10" CornerRadius="6" Margin="0,0,0,2"
+                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1">
+          <Grid>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="*" />
+              <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="0" VerticalAlignment="Center" Spacing="1">
+              <TextBlock Text="Show disconnected devices" FontFamily="Segoe UI Variable Text" FontSize="13"
+                         Foreground="{ThemeResource TextFillColorPrimaryBrush}" />
+              <TextBlock Text="Display offline Bluetooth devices" FontFamily="Segoe UI Variable Text" FontSize="11"
+                         Foreground="{ThemeResource TextFillColorTertiaryBrush}" />
+            </StackPanel>
+            <ToggleSwitch Grid.Column="1" IsOn="{Binding ShowDisconnectedBluetooth, Mode=TwoWay}"
+                          MinWidth="0" MinHeight="0" VerticalAlignment="Center" Margin="12,0,0,0"
+                          FocusVisualPrimaryThickness="0" FocusVisualSecondaryThickness="0" />
+          </Grid>
+        </Border>
+
+        <!-- ═══ SYSTEM ═══ -->
+        <TextBlock Text="SYSTEM" FontFamily="Segoe UI Variable Text" FontSize="11" FontWeight="SemiBold"
+                   Foreground="{ThemeResource TextFillColorTertiaryBrush}" CharacterSpacing="80" Margin="0,16,0,8" />
+
+        <!-- Sound Settings -->
+        <Border Padding="14,10,14,10" CornerRadius="6" Margin="0,0,0,2"
+                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1">
+          <Grid>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="Auto" />
+              <ColumnDefinition Width="*" />
+              <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <FontIcon Grid.Column="0" Glyph="&#xE8D6;" FontFamily="{ThemeResource SymbolThemeFontFamily}" FontSize="16" Foreground="{ThemeResource TextFillColorSecondaryBrush}" VerticalAlignment="Center" Margin="0,0,12,0" />
+            <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="1">
+              <TextBlock Text="Sound settings" FontFamily="Segoe UI Variable Text" FontSize="13"
+                         Foreground="{ThemeResource TextFillColorPrimaryBrush}" />
+              <TextBlock Text="Open Windows sound settings" FontFamily="Segoe UI Variable Text" FontSize="11"
+                         Foreground="{ThemeResource TextFillColorTertiaryBrush}" />
+            </StackPanel>
+            <Button Grid.Column="2" Command="{Binding OpenSoundSettingsCommand}"
+                    Padding="12,6,12,6" CornerRadius="4"
+                    Background="{ThemeResource SubtleFillColorSecondaryBrush}" BorderThickness="1"
+                    FocusVisualPrimaryThickness="0" FocusVisualSecondaryThickness="0">
+              <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                <TextBlock Text="Open" FontFamily="Segoe UI Variable Text" FontSize="12" />
+                <FontIcon Glyph="&#xE8A7;" FontFamily="{ThemeResource SymbolThemeFontFamily}" FontSize="11" Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+              </StackPanel>
+            </Button>
+          </Grid>
+        </Border>
+
+        <!-- Bluetooth Settings -->
+        <Border Padding="14,10,14,10" CornerRadius="6" Margin="0,0,0,2"
+                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1">
+          <Grid>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="Auto" />
+              <ColumnDefinition Width="*" />
+              <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <FontIcon Grid.Column="0" Glyph="&#xE702;" FontFamily="{ThemeResource SymbolThemeFontFamily}" FontSize="16" Foreground="{ThemeResource TextFillColorSecondaryBrush}" VerticalAlignment="Center" Margin="0,0,12,0" />
+            <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="1">
+              <TextBlock Text="Bluetooth settings" FontFamily="Segoe UI Variable Text" FontSize="13"
+                         Foreground="{ThemeResource TextFillColorPrimaryBrush}" />
+              <TextBlock Text="Open Windows Bluetooth settings" FontFamily="Segoe UI Variable Text" FontSize="11"
+                         Foreground="{ThemeResource TextFillColorTertiaryBrush}" />
+            </StackPanel>
+            <Button Grid.Column="2" Command="{Binding OpenBluetoothSettingsCommand}"
+                    Padding="12,6,12,6" CornerRadius="4"
+                    Background="{ThemeResource SubtleFillColorSecondaryBrush}" BorderThickness="1"
+                    FocusVisualPrimaryThickness="0" FocusVisualSecondaryThickness="0">
+              <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                <TextBlock Text="Open" FontFamily="Segoe UI Variable Text" FontSize="12" />
+                <FontIcon Glyph="&#xE8A7;" FontFamily="{ThemeResource SymbolThemeFontFamily}" FontSize="11" Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+              </StackPanel>
+            </Button>
+          </Grid>
+        </Border>
+
+        <!-- ═══ APPEARANCE ═══ -->
+        <TextBlock Text="APPEARANCE" FontFamily="Segoe UI Variable Text" FontSize="11" FontWeight="SemiBold"
+                   Foreground="{ThemeResource TextFillColorTertiaryBrush}" CharacterSpacing="80" Margin="0,16,0,8" />
+
+        <!-- Theme -->
+        <Border Padding="14,10,14,10" CornerRadius="6" Margin="0,0,0,2"
+                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1">
+          <Grid>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="Auto" />
+              <ColumnDefinition Width="*" />
+              <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <FontIcon Grid.Column="0" Glyph="&#xE771;" FontFamily="{ThemeResource SymbolThemeFontFamily}" FontSize="16" Foreground="{ThemeResource TextFillColorSecondaryBrush}" VerticalAlignment="Center" Margin="0,0,12,0" />
+            <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="1">
+              <TextBlock Text="Theme" FontFamily="Segoe UI Variable Text" FontSize="13"
+                         Foreground="{ThemeResource TextFillColorPrimaryBrush}" />
+              <TextBlock Text="Window backdrop style" FontFamily="Segoe UI Variable Text" FontSize="11"
+                         Foreground="{ThemeResource TextFillColorTertiaryBrush}" />
+            </StackPanel>
+            <ComboBox Grid.Column="2" SelectedItem="{Binding SurfaceTheme, Mode=TwoWay}" Width="100" VerticalAlignment="Center"
+                      FocusVisualPrimaryThickness="0" FocusVisualSecondaryThickness="0">
+              <x:String>Acrylic</x:String>
+              <x:String>Mica</x:String>
+            </ComboBox>
+          </Grid>
+        </Border>
+
+        <!-- ═══ DIAGNOSTICS ═══ -->
+        <TextBlock Text="DIAGNOSTICS" FontFamily="Segoe UI Variable Text" FontSize="11" FontWeight="SemiBold"
+                   Foreground="{ThemeResource TextFillColorTertiaryBrush}" CharacterSpacing="80" Margin="0,16,0,8" />
+
+        <!-- Export Logs -->
+        <Border Padding="14,10,14,10" CornerRadius="6" Margin="0,0,0,2"
+                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1">
+          <Grid>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="Auto" />
+              <ColumnDefinition Width="*" />
+              <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <FontIcon Grid.Column="0" Glyph="&#xE81C;" FontFamily="{ThemeResource SymbolThemeFontFamily}" FontSize="16" Foreground="{ThemeResource TextFillColorSecondaryBrush}" VerticalAlignment="Center" Margin="0,0,12,0" />
+            <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="1">
+              <TextBlock Text="Debug logs" FontFamily="Segoe UI Variable Text" FontSize="13"
+                         Foreground="{ThemeResource TextFillColorPrimaryBrush}" />
+              <TextBlock Text="Open log file location in Explorer" FontFamily="Segoe UI Variable Text" FontSize="11"
+                         Foreground="{ThemeResource TextFillColorTertiaryBrush}" />
+            </StackPanel>
+            <Button Grid.Column="2" Content="Export" Command="{Binding ExportLogsCommand}"
+                    MinWidth="56" Padding="8,4,8,4" CornerRadius="4"
+                    Background="{ThemeResource SubtleFillColorSecondaryBrush}" BorderThickness="1"
+                    FocusVisualPrimaryThickness="0" FocusVisualSecondaryThickness="0" />
+          </Grid>
+        </Border>
+
+        <!-- Version -->
+        <TextBlock Text="{Binding AppVersion}" FontFamily="Segoe UI Variable Text" FontSize="11"
+                   Foreground="{ThemeResource TextFillColorTertiaryBrush}" Margin="0,12,0,4"
+                   HorizontalAlignment="Center" />
+
+      </StackPanel>
+    </ScrollViewer>
+  </Border>
+</UserControl>

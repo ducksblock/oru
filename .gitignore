@@ -1,0 +1,57 @@
+# ──────────────────────────────────────────────────────────────────────────────
+# oru — .gitignore
+# ──────────────────────────────────────────────────────────────────────────────
+
+# ── .NET / MSBuild build output ───────────────────────────────────────────────
+bin/
+obj/
+
+# ── Release / publish artefacts (use publish.ps1 locally, upload to Releases) ─
+Publish/
+
+# ── NuGet package cache (restored automatically) ─────────────────────────────
+*.nupkg
+*.snupkg
+packages/
+# project.assets.json and nuget lock files are in obj/ (already excluded above)
+
+# ── .NET local tooling sentinel files ─────────────────────────────────────────
+.dotnet/
+
+# ── MSIX / AppX packaging artefacts ──────────────────────────────────────────
+*.msix
+*.appxbundle
+*.appx
+AppPackages/
+BundleArtifacts/
+
+# ── Visual Studio ─────────────────────────────────────────────────────────────
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# ── JetBrains Rider ──────────────────────────────────────────────────────────
+.idea/
+*.sln.iml
+
+# ── VS Code ───────────────────────────────────────────────────────────────────
+.vscode/
+
+# ── Internal design / AI session docs (not for public consumption) ────────────
+docs/
+
+# ── OS artefacts ─────────────────────────────────────────────────────────────
+Thumbs.db
+Desktop.ini
+.DS_Store
+ehthumbs.db
+
+# ── Windows crash dumps ───────────────────────────────────────────────────────
+*.dmp
+
+# ── Python (if any tooling scripts added later) ───────────────────────────────
+__pycache__/
+*.pyc
+*.pyo

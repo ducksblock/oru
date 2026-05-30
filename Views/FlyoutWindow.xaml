@@ -1,0 +1,494 @@
+<Window x:Class="oru.Views.FlyoutWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:converters="using:oru.Converters"
+        xmlns:views="using:oru.Views"
+        Title="oru">
+
+  <Grid x:Name="RootGrid" Background="Transparent" Padding="0">
+    <Grid.Resources>
+      <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+      <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
+      <converters:CountToVisibilityConverter x:Key="CountToVisibilityConverter" />
+      <converters:BoolToColorBrushConverter x:Key="BoolToColorBrushConverter" />
+      <converters:BoolToOpacityConverter x:Key="BoolToOpacityConverter" />
+    </Grid.Resources>
+
+    <Border x:Name="FlyoutSurface"
+            Background="Transparent"
+            BorderThickness="0"
+            CornerRadius="8">
+      <ScrollViewer IsTabStop="False"
+                    VerticalScrollBarVisibility="Auto"
+                    HorizontalScrollBarVisibility="Disabled">
+        <StackPanel Padding="16">
+
+          <!-- ═══ HEADER ═══ -->
+          <Grid Margin="0,0,0,0">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="*" />
+              <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+              <!-- oru brand mark -->
+              <Image Source="ms-appx:///oru.png" Width="26" Height="26" />
+              <TextBlock Text="oru"
+                         FontFamily="Segoe UI Variable Display"
+                         FontSize="16"
+                         FontWeight="SemiBold"
+                         Foreground="{ThemeResource TextFillColorPrimaryBrush}"
+                         VerticalAlignment="Center" />
+            </StackPanel>
+
+            <StackPanel Grid.Column="1"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Spacing="2">
+              <Button Command="{Binding ManualRefreshCommand}"
+                      Background="Transparent"
+                      BorderThickness="0"
+                      FocusVisualPrimaryThickness="0"
+                      FocusVisualSecondaryThickness="0"
+                      MinWidth="36" MinHeight="36"
+                      Padding="8"
+                      ToolTipService.ToolTip="Refresh">
+                <Grid Width="16" Height="16">
+                  <FontIcon Glyph="&#xE72C;"
+                            FontFamily="{ThemeResource SymbolThemeFontFamily}"
+                            FontSize="14"
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=Invert}" />
+                  <ProgressRing Width="16" Height="16"
+                                IsActive="{Binding IsBusy}"
+                                Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibilityConverter}}" />
+                </Grid>
+              </Button>
+              <Button Background="Transparent"
+                      BorderThickness="0"
+                      FocusVisualPrimaryThickness="0"
+                      FocusVisualSecondaryThickness="0"
+                      MinWidth="32" MinHeight="32"
+                      Padding="6"
+                      Click="OnMinimizeClick"
+                      ToolTipService.ToolTip="Close">
+                <FontIcon Glyph="&#xE8BB;"
+                          FontFamily="{ThemeResource SymbolThemeFontFamily}"
+                          FontSize="12"
+                          Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+              </Button>
+            </StackPanel>
+          </Grid>
+
+          <!-- Brand accent line -->
+          <Border x:Name="BrandLine"
+                  Height="2"
+                  Margin="0,10,0,4"
+                  CornerRadius="1"
+                  Opacity="0.9"
+                  Background="{StaticResource OruBrandGradient}">
+          </Border>
+
+          <!-- ═══ ACTIVE SESSION (MIRRORING) ═══ -->
+          <StackPanel Visibility="{Binding IsMirroring, Converter={StaticResource BoolToVisibilityConverter}}">
+            <Grid Margin="0,14,0,6" MinHeight="32">
+              <TextBlock Text="ACTIVE SESSION"
+                         FontFamily="Segoe UI Variable Text" FontSize="11" FontWeight="SemiBold"
+                         Foreground="{ThemeResource TextFillColorTertiaryBrush}" CharacterSpacing="80"
+                         VerticalAlignment="Center" />
+            </Grid>
+
+            <!-- 1-to-1 Mirror Card -->
+            <Border Margin="0,3,0,3" Padding="14,12,14,12" CornerRadius="8"
+                    Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                    BorderBrush="{StaticResource OruAccentBrush}" BorderThickness="1"
+                    Visibility="{Binding HasSingleMirrorTarget, Converter={StaticResource BoolToVisibilityConverter}}">
+              <StackPanel Spacing="10">
+                <Grid>
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                  </Grid.ColumnDefinitions>
+                  <StackPanel Grid.Column="0" Spacing="2" HorizontalAlignment="Center">
+                    <Border Width="28" Height="28" CornerRadius="14" Background="{ThemeResource SubtleFillColorSecondaryBrush}" HorizontalAlignment="Center">
+                      <FontIcon Glyph="&#xE767;" FontFamily="{ThemeResource SymbolThemeFontFamily}" FontSize="13" Foreground="{ThemeResource TextFillColorSecondaryBrush}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                    <TextBlock Text="{Binding MirrorSourceName}" FontFamily="Segoe UI Variable Text" FontSize="11" Foreground="{ThemeResource TextFillColorPrimaryBrush}" HorizontalAlignment="Center" TextAlignment="Center" TextWrapping="WrapWholeWords" MaxLines="2" />
+                    <TextBlock Text="Source" FontFamily="Segoe UI Variable Text" FontSize="10" Foreground="{ThemeResource TextFillColorTertiaryBrush}" HorizontalAlignment="Center" />
+                  </StackPanel>
+                  <FontIcon Grid.Column="1" Glyph="&#xE72A;" FontFamily="{ThemeResource SymbolThemeFontFamily}" FontSize="14" Foreground="{StaticResource OruAccentBrush}" VerticalAlignment="Center" Margin="6,0,6,0" />
+                  <StackPanel Grid.Column="2" Spacing="2" HorizontalAlignment="Center">
+                    <Border Width="28" Height="28" CornerRadius="14" Background="{ThemeResource SubtleFillColorSecondaryBrush}" HorizontalAlignment="Center">
+                      <FontIcon Glyph="&#xE7F6;" FontFamily="{ThemeResource SymbolThemeFontFamily}" FontSize="13" Foreground="{ThemeResource TextFillColorSecondaryBrush}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                    <TextBlock Text="{Binding MirrorTargetNames}" FontFamily="Segoe UI Variable Text" FontSize="11" Foreground="{ThemeResource TextFillColorPrimaryBrush}" HorizontalAlignment="Center" TextAlignment="Center" TextWrapping="WrapWholeWords" MaxLines="2" />
+                    <TextBlock Text="Mirror" FontFamily="Segoe UI Variable Text" FontSize="10" Foreground="{ThemeResource TextFillColorTertiaryBrush}" HorizontalAlignment="Center" />
+                  </StackPanel>
+                </Grid>
+                <Button Command="{Binding MergeAudioCommand}" HorizontalAlignment="Stretch" Padding="8,6,8,6" CornerRadius="6" Background="{ThemeResource SubtleFillColorSecondaryBrush}" BorderThickness="0" FocusVisualPrimaryThickness="0" FocusVisualSecondaryThickness="0">
+                  <StackPanel Orientation="Horizontal" Spacing="6" HorizontalAlignment="Center">
+                    <FontIcon Glyph="&#xE71A;" FontFamily="{ThemeResource SymbolThemeFontFamily}" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                    <TextBlock Text="Stop Mirroring" FontFamily="Segoe UI Variable Text" FontSize="11" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                  </StackPanel>
+                </Button>
+              </StackPanel>
+            </Border>
+
+            <!-- 1-to-many Mirror Card -->
+            <Border Margin="0,3,0,3" Padding="14,14,14,14" CornerRadius="8"
+                    Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                    BorderBrush="{StaticResource OruAccentBrush}" BorderThickness="1"
+                    Visibility="{Binding HasMultipleMirrorTargets, Converter={StaticResource BoolToVisibilityConverter}}">
+              <StackPanel Spacing="12">
+                <StackPanel Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+                  <Border Width="28" Height="28" CornerRadius="14" Background="{ThemeResource SubtleFillColorSecondaryBrush}" HorizontalAlignment="Center">
+                    <FontIcon Glyph="&#xE767;" FontFamily="{ThemeResource SymbolThemeFontFamily}" FontSize="13" Foreground="{ThemeResource TextFillColorSecondaryBrush}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                  </Border>
+                  <StackPanel VerticalAlignment="Center" Spacing="1">
+                    <TextBlock Text="{Binding MirrorSourceName}" FontFamily="Segoe UI Variable Text" FontSize="13" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" TextWrapping="WrapWholeWords" MaxLines="1" />
+                    <TextBlock Text="Source" FontFamily="Segoe UI Variable Text" FontSize="11" Foreground="{ThemeResource TextFillColorTertiaryBrush}" />
+                  </StackPanel>
+                </StackPanel>
+
+                <Grid Margin="13,0,0,0">
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="20" />
+                    <ColumnDefinition Width="*" />
+                  </Grid.ColumnDefinitions>
+                  <Rectangle Width="2" Fill="{ThemeResource DividerStrokeColorDefaultBrush}" HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="0,-4,0,-4" />
+                  <ItemsControl Grid.Column="1" ItemsSource="{Binding MirrorTargets}" IsTabStop="False">
+                    <ItemsControl.ItemTemplate>
+                      <DataTemplate>
+                        <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,4,0,4" VerticalAlignment="Center">
+                          <Border Width="24" Height="24" CornerRadius="12" Background="{ThemeResource SubtleFillColorSecondaryBrush}" HorizontalAlignment="Center">
+                            <FontIcon Glyph="{Binding DeviceIconGlyph}" FontFamily="{ThemeResource SymbolThemeFontFamily}" FontSize="11" Foreground="{ThemeResource TextFillColorSecondaryBrush}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                          </Border>
+                          <TextBlock Text="{Binding Name}" FontFamily="Segoe UI Variable Text" FontSize="12" Foreground="{ThemeResource TextFillColorPrimaryBrush}" TextWrapping="WrapWholeWords" MaxLines="1" VerticalAlignment="Center" />
+                        </StackPanel>
+                      </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                  </ItemsControl>
+                </Grid>
+
+                <Button Command="{Binding MergeAudioCommand}" HorizontalAlignment="Stretch" Padding="8,6,8,6" CornerRadius="6" Background="{ThemeResource SubtleFillColorSecondaryBrush}" BorderThickness="0" FocusVisualPrimaryThickness="0" FocusVisualSecondaryThickness="0">
+                  <StackPanel Orientation="Horizontal" Spacing="6" HorizontalAlignment="Center">
+                    <FontIcon Glyph="&#xE71A;" FontFamily="{ThemeResource SymbolThemeFontFamily}" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                    <TextBlock Text="Stop Mirroring" FontFamily="Segoe UI Variable Text" FontSize="11" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                  </StackPanel>
+                </Button>
+              </StackPanel>
+            </Border>
+          </StackPanel>
+
+          <!-- ═══ SYSTEM AUDIO ═══ -->
+          <Grid Margin="0,14,0,6" MinHeight="32">
+            <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+              <FontIcon Glyph="&#xE7F6;" FontFamily="{ThemeResource SymbolThemeFontFamily}" FontSize="12" Foreground="{ThemeResource TextFillColorTertiaryBrush}" />
+              <TextBlock Text="SYSTEM AUDIO"
+                         FontFamily="Segoe UI Variable Text" FontSize="11" FontWeight="SemiBold"
+                         Foreground="{ThemeResource TextFillColorTertiaryBrush}" CharacterSpacing="80" />
+            </StackPanel>
+          </Grid>
+
+          <!-- Device list: NO LONGER HIDDEN DURING MIRRORING -->
+          <ItemsControl x:Name="DeviceList"
+                        ItemsSource="{Binding SystemDevices, Mode=OneWay}"
+                        IsTabStop="False"
+                        Padding="0">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate>
+                <Border Margin="0,3,0,3" Padding="12,10,12,10" CornerRadius="6"
+                        Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                        BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1"
+                        PointerEntered="OnCardPointerEntered"
+                        PointerExited="OnCardPointerExited"
+                        Opacity="{Binding IsCardOpaque, Converter={StaticResource BoolToOpacityConverter}}">
+                  <Grid ColumnSpacing="10" PointerPressed="OnAudioDeviceCardPressed">
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="32" />
+                      <ColumnDefinition Width="*" />
+                      <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Border Grid.Column="0" Width="32" Height="32" CornerRadius="16" Background="{ThemeResource SubtleFillColorSecondaryBrush}" VerticalAlignment="Center">
+                      <FontIcon Glyph="{Binding DeviceIconGlyph}" FontFamily="{ThemeResource SymbolThemeFontFamily}" FontSize="15" Foreground="{ThemeResource TextFillColorSecondaryBrush}" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                    </Border>
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="1">
+                      <TextBlock Text="{Binding Name}" FontFamily="Segoe UI Variable Text" FontSize="13" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" TextWrapping="WrapWholeWords" MaxLines="2" />
+                      <TextBlock Text="{Binding StatusLabel}" FontFamily="Segoe UI Variable Text" FontSize="11" Foreground="{ThemeResource TextFillColorTertiaryBrush}" />
+                    </StackPanel>
+                    <Border Grid.Column="2" Visibility="{Binding ShowActivePill, Converter={StaticResource BoolToVisibilityConverter}}" MinWidth="56" Padding="10,4,10,4" CornerRadius="12" Background="{ThemeResource AccentFillColorDefaultBrush}" VerticalAlignment="Center" HorizontalAlignment="Right">
+                      <TextBlock Text="Active" FontFamily="Segoe UI Variable Text" FontSize="11" FontWeight="SemiBold" HorizontalAlignment="Center" Foreground="{ThemeResource TextOnAccentFillColorPrimaryBrush}" />
+                    </Border>
+                    <Border Grid.Column="2" Visibility="{Binding ShowSwitchButton, Converter={StaticResource BoolToVisibilityConverter}}" MinWidth="56" Padding="10,4,10,4" CornerRadius="12" Background="{ThemeResource SubtleFillColorSecondaryBrush}" VerticalAlignment="Center" HorizontalAlignment="Right">
+                      <TextBlock Text="Switch" FontFamily="Segoe UI Variable Text" FontSize="11" FontWeight="SemiBold" HorizontalAlignment="Center" Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                    </Border>
+                    <Border Grid.Column="2" Visibility="{Binding ShowBuiltInLabel, Converter={StaticResource BoolToVisibilityConverter}}" MinWidth="56" Padding="10,4,10,4" CornerRadius="12" Background="Transparent" VerticalAlignment="Center" HorizontalAlignment="Right">
+                      <TextBlock Text="Internal" FontFamily="Segoe UI Variable Text" FontSize="11" FontWeight="SemiBold" HorizontalAlignment="Center" Foreground="{ThemeResource TextFillColorTertiaryBrush}" />
+                    </Border>
+                  </Grid>
+                </Border>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+
+          <!-- ═══ MIRROR AUDIO BUTTON — hidden during active mirroring and when <2 devices ═══ -->
+          <Button Command="{Binding MergeAudioCommand}"
+                  Visibility="{Binding CanMirrorAudio, Converter={StaticResource BoolToVisibilityConverter}}"
+                  HorizontalAlignment="Stretch"
+                  Margin="0,4,0,2"
+                  Padding="12,8,12,8"
+                  CornerRadius="6"
+                  Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                  BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                  BorderThickness="1"
+                  FocusVisualPrimaryThickness="0"
+                  FocusVisualSecondaryThickness="0">
+            <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center">
+              <FontIcon Glyph="&#xE71B;"
+                        FontFamily="{ThemeResource SymbolThemeFontFamily}"
+                        FontSize="14"
+                        Foreground="{StaticResource OruAccentBrush}" />
+              <TextBlock Text="{Binding MergeAudioButtonText}"
+                         FontFamily="Segoe UI Variable Text"
+                         FontSize="12"
+                         FontWeight="SemiBold"
+                         Foreground="{ThemeResource TextFillColorPrimaryBrush}" />
+            </StackPanel>
+          </Button>
+
+          <!-- ═══ EMPTY STATE ═══ -->
+          <Border Margin="0,3,0,3"
+                  Padding="12,14,12,14"
+                  CornerRadius="6"
+                  Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                  BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                  BorderThickness="1"
+                  Visibility="{Binding Devices.Count, Converter={StaticResource CountToVisibilityConverter}, Mode=OneWay}">
+            <StackPanel Spacing="2">
+              <TextBlock Text="{Binding StatusText, Mode=OneWay}"
+                         FontFamily="Segoe UI Variable Text"
+                         FontSize="12"
+                         Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+              <TextBlock Text="Watching for audio devices."
+                         FontFamily="Segoe UI Variable Text"
+                         FontSize="11"
+                         Foreground="{ThemeResource TextFillColorTertiaryBrush}" />
+            </StackPanel>
+          </Border>
+
+          <!-- ═══ BLUETOOTH AUDIO ═══ -->
+          <Grid Margin="0,14,0,6">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="*" />
+              <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+              <FontIcon Glyph="&#xE702;" FontFamily="{ThemeResource SymbolThemeFontFamily}" FontSize="12" Foreground="{ThemeResource TextFillColorTertiaryBrush}" />
+              <TextBlock Text="BLUETOOTH AUDIO"
+                         FontFamily="Segoe UI Variable Text"
+                         FontSize="11"
+                         FontWeight="SemiBold"
+                         Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                         CharacterSpacing="80" />
+            </StackPanel>
+
+            <ToggleSwitch x:Name="BluetoothToggle"
+                          Grid.Column="1"
+                          IsOn="{Binding IsBluetoothOn, Mode=OneWay}"
+                          Toggled="OnBluetoothToggled"
+                          FocusVisualPrimaryThickness="0"
+                          FocusVisualSecondaryThickness="0"
+                          MinWidth="0"
+                          MinHeight="0"
+                          VerticalAlignment="Center" />
+          </Grid>
+
+          <ItemsControl ItemsSource="{Binding BluetoothDevices, Mode=OneWay}"
+                        Visibility="{Binding IsBluetoothOn, Converter={StaticResource BoolToVisibilityConverter}}"
+                        Padding="0">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate>
+                <Border Margin="0,3,0,3"
+                        Padding="12,10,12,10"
+                        CornerRadius="6"
+                        Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                        BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                        BorderThickness="1"
+                        PointerEntered="OnCardPointerEntered"
+                        PointerExited="OnCardPointerExited"
+                        Opacity="{Binding IsConnected, Converter={StaticResource BoolToOpacityConverter}}">
+                  <Grid ColumnSpacing="10">
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="32" />
+                      <ColumnDefinition Width="*" />
+                      <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <Grid Grid.Column="0" Width="32" Height="32">
+                      <Border Width="32" Height="32"
+                              CornerRadius="16"
+                              Background="{ThemeResource SubtleFillColorSecondaryBrush}"
+                              VerticalAlignment="Center">
+                        <FontIcon Glyph="{Binding DeviceIconGlyph}"
+                                  FontFamily="{ThemeResource SymbolThemeFontFamily}"
+                                  FontSize="15"
+                                  Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                  VerticalAlignment="Center"
+                                  HorizontalAlignment="Center" />
+                      </Border>
+                      <!-- BT badge -->
+                      <Border Width="14" Height="14"
+                              CornerRadius="7"
+                              Background="#2563EB"
+                              HorizontalAlignment="Right"
+                              VerticalAlignment="Bottom"
+                              Margin="0,0,-2,0">
+                        <FontIcon Glyph="&#xE702;"
+                                  FontFamily="{ThemeResource SymbolThemeFontFamily}"
+                                  FontSize="8"
+                                  Foreground="White"
+                                  HorizontalAlignment="Center"
+                                  VerticalAlignment="Center" />
+                      </Border>
+                    </Grid>
+
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="2">
+                      <TextBlock Text="{Binding Name}"
+                                 FontFamily="Segoe UI Variable Text"
+                                 FontSize="13"
+                                 FontWeight="SemiBold"
+                                 Foreground="{ThemeResource TextFillColorPrimaryBrush}"
+                                 TextWrapping="WrapWholeWords"
+                                 MaxLines="2" />
+                      <!-- Status row: dot + connected/disconnected text -->
+                      <StackPanel Orientation="Horizontal" Spacing="5">
+                        <Ellipse Width="6" Height="6"
+                                 VerticalAlignment="Center"
+                                 Fill="{Binding IsConnected, Converter={StaticResource BoolToColorBrushConverter}}" />
+                        <TextBlock Text="{Binding StatusLabel}"
+                                   FontFamily="Segoe UI Variable Text"
+                                   FontSize="11"
+                                   Foreground="{ThemeResource TextFillColorTertiaryBrush}" />
+                      </StackPanel>
+                    </StackPanel>
+
+                    <Button Grid.Column="2"
+                            Command="{Binding ElementName=RootGrid, Path=DataContext.ToggleBluetoothDeviceCommand}"
+                            CommandParameter="{Binding}"
+                            IsEnabled="{Binding CanConnect}"
+                            Background="Transparent"
+                            BorderThickness="1"
+                            BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+                            FocusVisualPrimaryThickness="0"
+                            FocusVisualSecondaryThickness="0"
+                            VerticalAlignment="Center"
+                            MinWidth="72"
+                            CornerRadius="12"
+                            Padding="8,4,8,4">
+                      <StackPanel Orientation="Horizontal"
+                                  Spacing="5"
+                                  HorizontalAlignment="Center">
+                        <ProgressRing Width="10" Height="10"
+                                      IsActive="{Binding IsConnectionInProgress}"
+                                      Visibility="{Binding IsConnectionInProgress, Converter={StaticResource BoolToVisibilityConverter}}" />
+                        <TextBlock Text="{Binding ConnectButtonText}"
+                                   FontFamily="Segoe UI Variable Text"
+                                   FontSize="11"
+                                   FontWeight="SemiBold"
+                                   Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                      </StackPanel>
+                    </Button>
+                  </Grid>
+                </Border>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+
+          <!-- BT Off -->
+          <Border Margin="0,3,0,3"
+                  Padding="12,12,12,12"
+                  CornerRadius="6"
+                  Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                  BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                  BorderThickness="1"
+                  Visibility="{Binding IsBluetoothOn, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=Invert}">
+            <StackPanel Orientation="Horizontal" Spacing="8">
+              <FontIcon Glyph="&#xE702;"
+                        FontFamily="{ThemeResource SymbolThemeFontFamily}"
+                        FontSize="14"
+                        Foreground="{ThemeResource TextFillColorTertiaryBrush}" />
+              <TextBlock Text="Bluetooth is turned off"
+                         FontFamily="Segoe UI Variable Text"
+                         FontSize="12"
+                         Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                         VerticalAlignment="Center" />
+            </StackPanel>
+          </Border>
+
+          <!-- No BT devices -->
+          <Border Margin="0,3,0,3"
+                  Padding="12,12,12,12"
+                  CornerRadius="6"
+                  Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                  BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                  BorderThickness="1"
+                  Visibility="{Binding ShowNoBluetoothDevices, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}">
+            <TextBlock Text="No paired Bluetooth devices"
+                       FontFamily="Segoe UI Variable Text"
+                       FontSize="12"
+                       Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+          </Border>
+
+          <!-- ═══ ERROR ═══ -->
+          <Border Margin="0,4,0,2"
+                  Padding="12,8,12,8"
+                  CornerRadius="6"
+                  Background="{ThemeResource SystemFillColorCriticalBackgroundBrush}"
+                  BorderBrush="{ThemeResource SystemFillColorCriticalBrush}"
+                  BorderThickness="1"
+                  Visibility="{Binding ErrorMessage, Converter={StaticResource StringToVisibilityConverter}, Mode=OneWay}">
+            <TextBlock Text="{Binding ErrorMessage, Mode=OneWay}"
+                       FontFamily="Segoe UI Variable Text"
+                       FontSize="11"
+                       Foreground="{ThemeResource TextFillColorPrimaryBrush}" />
+          </Border>
+
+          <!-- ═══ FOOTER ═══ -->
+          <Border Height="1"
+                  Margin="0,8,0,4"
+                  Background="{ThemeResource DividerStrokeColorDefaultBrush}" />
+
+          <Button Background="Transparent"
+                  BorderThickness="0"
+                  FocusVisualPrimaryThickness="0"
+                  FocusVisualSecondaryThickness="0"
+                  HorizontalAlignment="Center"
+                  Padding="8,6,8,6"
+                  MinWidth="0" MinHeight="0"
+                  Click="OnSettingsClick"
+                  ToolTipService.ToolTip="Settings">
+            <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+              <FontIcon Glyph="&#xE713;"
+                        FontFamily="{ThemeResource SymbolThemeFontFamily}"
+                        FontSize="14"
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+              <TextBlock Text="Settings"
+                         FontFamily="Segoe UI Variable Text"
+                         FontSize="12"
+                         Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+            </StackPanel>
+          </Button>
+
+        </StackPanel>
+      </ScrollViewer>
+    </Border>
+
+    <!-- ═══ SETTINGS OVERLAY ═══ -->
+    <views:SettingsPanel x:Name="SettingsOverlay"
+                         Visibility="Collapsed" />
+
+  </Grid>
+</Window>

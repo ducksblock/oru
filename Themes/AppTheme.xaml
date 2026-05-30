@@ -1,0 +1,19 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+  <!-- oru brand identity — matches the Figma logo blue -->
+  <SolidColorBrush x:Key="OruBrandGradient" Color="#5B7FFF" />
+
+  <SolidColorBrush x:Key="OruAccentBrush" Color="#5B7FFF" />
+  <SolidColorBrush x:Key="OruSecondaryAccentBrush" Color="#5B7FFF" />
+  <SolidColorBrush x:Key="OruBrandMarkSurfaceBrush" Color="#272A3A" />
+
+  <!--
+    Everything else uses native WinUI 3 ThemeResource keys.
+    These aliases exist so the XAML can reference them by stable name,
+    but they resolve to the exact same brushes Windows 11 uses for
+    Settings, Quick Settings, Action Center, etc.
+  -->
+
+</ResourceDictionary>
+
