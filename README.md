@@ -1,15 +1,15 @@
-# oru
+# oru 🎧
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+**A lightweight Windows tray utility for **real-time audio mirroring**, multi-device output merging, and quick Bluetooth connectivity.**
 
-A lightweight Windows tray utility for **real-time audio mirroring**, multi-device output merging, and quick Bluetooth connectivity.
+<img width="2048" height="1024" alt="oru-promotional-header" src="https://github.com/user-attachments/assets/a9b67995-582d-4d27-905f-07cfd8e27e4d" />
 
 ## Features
 
-- **Audio Mirroring** — Route system audio to multiple playback devices simultaneously
-- **Quick Switching** — One-click output device toggling from the system tray
-- **Bluetooth Connect** — Quickly connect to paired wireless audio devices from the tray
-- **Fluent Design** — Native Windows 11 flyout with Acrylic and Mica backdrops
+- **Audio Mirroring** - Route system audio to multiple playback devices simultaneously
+- **Quick Switching** - One-click output device toggling from the system tray
+- **Bluetooth Connect** - Quickly connect to paired wireless audio devices from the tray
+- **Fluent Design** - Native Windows 11 flyout with Acrylic and Mica backdrops
 
 ## Install
 
